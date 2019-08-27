@@ -72,11 +72,13 @@ class PlotsIndex extends React.Component {
       volunteerBoolean: e.target.checked
     }, () => this.combineFiltersAndSort(this.state.allPlots))
   }
+
   handleBioWasteBoolean(e) {
     this.setState({
       bioWasteBoolean: e.target.checked
     }, () => this.combineFiltersAndSort(this.state.allPlots))
   }
+
   handlePlotType(e) {
     console.log(e.target.value)
     this.setState({
@@ -100,16 +102,16 @@ class PlotsIndex extends React.Component {
     let filteredByBioWaste
     let filteredByCostsInvolved
     let filteredByPlotType
-    let filterBySearchText
+    let filteredBySearchText
     let filteredBySlotsAvailable
 
     // Create filter based on Regular expression of the search term
     const re= new RegExp(this.state.searchTerm, 'i')
 
     if(!this.state.searchTerm) {
-      filterBySearchText = this.state.allPlots
+      filteredBySearchText = this.state.allPlots
     } else {
-      filterBySearchText = this.state.allPlots.filter(plot => re.test(plot.name))
+      filteredBySearchText = this.state.allPlots.filter(plot => re.test(plot.name))
     }
 
     if(this.state.plotType === 'All') {
@@ -117,8 +119,6 @@ class PlotsIndex extends React.Component {
     } else {
       filteredByPlotType = this.state.allPlots.filter(plot => plot.plotType === this.state.plotType)
 
-      // console.log(this.state.plotType)
-      // console.log(filteredByPlotType)
     }
 
     if(this.state.costInvolvedBoolean) {
@@ -146,24 +146,15 @@ class PlotsIndex extends React.Component {
 
     if(this.state.bioWasteBoolean) {
       filteredByBioWaste = this.state.allPlots.filter(plot => plot.bioWasteAccepted)
-      // console.log(filteredByBioWaste)
     } else {
       filteredByBioWaste = this.state.allPlots
     }
 
     _.indexOf = _.findIndex
-    filteredPlots = _.intersection(this.state.allPlots, filteredByVolunteer, filteredByBioWaste, filteredByCostsInvolved, filteredByPlotType, filterBySearchText, filteredBySlotsAvailable)
-
-    console.log('volunteer filter', filteredByVolunteer)
-    console.log('biowaste filter', filteredByBioWaste)
-    console.log('cost filter', filteredByCostsInvolved)
+    filteredPlots = _.intersection(this.state.allPlots, filteredByVolunteer, filteredByBioWaste, filteredByCostsInvolved, filteredByPlotType, filteredBySearchText, filteredBySlotsAvailable)
 
     const [field, order] = this.state.sortTerm.split('|')
-
     const sortedPlots = _.orderBy(filteredPlots, [field], [order])
-
-    console.log('sortedPlots', sortedPlots)
-
     return this.setState({ plotsToDisplay: sortedPlots })
 
   }
