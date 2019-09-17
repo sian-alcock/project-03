@@ -66,6 +66,7 @@ const About = () => {
             <li>• Tomatos, Onions & Potatos - Lars Blankers</li>
             <li>• Market Greens - Lou Liebau</li>
             <li>• Apples - Akshay Nanavati</li>
+            <li>• French local growing salad - Agence Producteurs Locaux Damien Kühn</li>
           </ul>
           <p>Icons made by smalllikeart from www.flaticon.com</p>
           <p>Smiling Carrot from www.vegetableislands.com</p>
