@@ -52,11 +52,11 @@ class PlantsShow extends React.Component {
                       </tr>
                       <tr>
                         <td><p>Seed period:</p></td>
-                        <td><p>{this.state.plant.seedPeriod}</p></td>
+                        <td><p>{!this.state.plant.seedPeriod ? '' : this.state.plant.seedPeriod.map((item, i) => (i ? ', ' : '') + item)}</p></td>
                       </tr>
                       <tr>
                         <td><p>Harvest period:</p></td>
-                        <td><p>{this.state.plant.harvestPeriod}</p></td>
+                        <td><p>{!this.state.plant.harvestPeriod ? '' : this.state.plant.harvestPeriod.map((item, i) => (i ? ', ' : '') + item)}</p></td>
                       </tr>
                       <tr>
                         <td><p>Propogator needed?</p></td>
