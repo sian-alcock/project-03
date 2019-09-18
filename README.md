@@ -22,6 +22,11 @@ It has been developed collaboratively for the duration of the project.  I have m
 ### Project duration
 7 days.
 
+### Installation
+1. Clone or download the repo
+2. Run 'yarn init' in the CLI
+3. Run 'mongod', 'yarn seed', 'yarn serve:backend' and 'yarn serve:frontend' in the CLI
+
 ### Brief
 
 Technical requirements:
@@ -34,7 +39,6 @@ Technical requirements:
 * **Have a visually impressive design** to kick your portfolio up a notch and have something to wow future clients & employers. **ALLOW** time for this.
 * **Be deployed online** so it's publicly accessible.
 * **Have automated tests** for _at least_ one RESTful resource on the back-end. Improve your employability by demonstrating a good understanding of testing principals.
-
 
 ### Technologies Used
 
@@ -58,34 +62,41 @@ Technical requirements:
 
 ### Approach Taken
 
-We agreed on the idea fairly quickly and drafted three data models on the whiteboard, one for plots, one for users and one for plants/vegetables.  It was agreed that the first two would be enough to meet the brief and so we made those a requirement our for Minimal Viable Product (MVP).  The plants would be added later if time permitted.
+We agreed on the idea fairly quickly and drafted three data models on the whiteboard, one for plots, one for users and one for plants/vegetables.  It was agreed that the first two would be enough to meet the brief and so we made those a requirement for our Minimal Viable Product (MVP).  The plants would be added later if time permitted.
 
 ![Screenshot](./readme-assets/Screenshot-data-model.png)
 
-Still on the whiteboard, we drew wireframes for a list of pages that would enable user registration and login plus an index page for the plots and a show page.  We also included a new/edit page to allow users to add their own plot.
+Still on the whiteboard, we drew wireframes for a list of pages that we felt we needed for MVP.  Namely:
 
-We created a Trello board and documented a list of tasks.  Each task was categorized as 'must have', 'should have' or 'could have'.  Our goal was to complete all the 'must have' tasks and as many of the remainder as we could.
+* Registration
+* Login
+* Index page, listing all plots
+* Show page, for a specific plot
+* Add new and Edit plot pages.
 
-We made a plan to build the backend tests first and use test-driven development to build the backend.  We also made the decision to break up the backend tasks into chunks and build in pairs.  We tried to break up the work so that we could all merge the code after one chunk was built.  This worked pretty well and we were able to complete the backend tasks for MVP in about a day.
+![Screenshot](./readme-assets/Screenshot-wireframes.png)
 
-Having completed the back end, we turned to the front end.  We wanted to make the application fully responsive.  To do this, we agreed that we would build the pages in mobile view first.  Once complete, we would optimize them for tablet and desktop.
+Next, we created a Trello board and documented a list of tasks.  Each task was categorized as 'must have', 'should have' or 'could have'.  Our goal was to complete all the 'must have' tasks and as many of the remainder as we could.
 
-We continued in our pairs whilst we completed the pages we needed to meet MVP.  Once we had completed all MVP tasks, we could then tackle core features individually or in pairs depending on our preferences.
+The backend tests were built first so that we could employ test-driven development to build the backend.  We also made the decision to break up the backend tasks into chunks and to code in pairs.  After each pair completed their allotted 'chunk', the code was merged and tested.  This worked pretty well and we were able to complete the backend tasks for MVP in about a day and a half.
+
+Having completed the back end, we turned to the front end.  We wanted to make the application fully responsive.  To do this, we agreed that we would build the pages in mobile view first.  Once complete, we would then optimize them for desktop.
+
+We continued coding in our pairs whilst we completed the pages we needed to meet MVP.  Once we had completed all MVP tasks, we could then tackle additional features individually or in pairs depending on our preferences.
 
 My main individual contributions were to:
 * build the filter, sorting and search capabilities on the Plot Index page, including integration with the cluster map
 * devise the overall styling schema, including font, layout, colours, logo, favicon
-* finalization of the Plants index and show pages.
+* finalize the Plants index and show pages
+* act as project co-ordinator and GitHub master.
 
 ## Functionality
 
-In the list below, I have listed the features included on each page.  I have coded each feature using superscript characters as follows:
+In the list below, I have listed the features included on each page.  I have labelled each feature using superscript characters as follows:
 
 <sup>1</sup> Coded by me
 <sup>2</sup> Coded individually by another team member
-<sup>3</sup> Coded in pairs (in some cases as a four).
-
-I have expanded on some features - either coded by me or that I find interesting.
+<sup>3</sup> Coded collaboratively - mainly in pairs but in some cases, as a four.
 
 ### Landing / Home page
 The user is introduced to the website with an attractive welcome screen that has a parallax which explains the purpose of the site.
@@ -203,10 +214,35 @@ We built the registration and login pages in pairs. <sup>3</sup>
 
 ![Screenshot](./readme-assets/Screenshot-registration.png)
 
-### Code common to all pages
+### Common code
+* Code to convert a post code into longitude and latitude (see expansion below)<sup>2</sup>
 * Navigation bar<sup>3</sup>
 * Footer<sup>2</sup>
-* Responsive design
+* Responsive design<sup>3</sup>
+* Automated tests<sup>3</sup>
+* Seeded database with around 16 plots, 10 plants and 5 users<sup>3</sup>
+
+#### How to lookup lat/long co-ordinates from post code
+In the first draft of our Plot Add new/Edit pages, we had the user enter the latitude and longitude of the plot.  This seemed a cumbersome exercise so Freddie took on the task of implementing a function to convert a post code into lat/long co-ordinates using an API called postcodes.io.  The function was built in the backend in the Plot model for the plot location and in the user model for the user's location.  Below is the function from the Plot model.
+
+```JavaScript
+plotSchema.pre('validate', function getGeolocation(done) {
+  if(!this.isModified('postCode')) return done()
+
+  axios.post('https://postcodes.io/postcodes?filter=longitude,latitude', { postcodes: [this.postCode] })
+    .then((res) => {
+      if(!res.data.result[0].result) {
+        this.invalidate('postCode', 'Invalid post code')
+        return done()
+      }
+      const { latitude, longitude } = res.data.result[0].result
+      this.latitude = latitude
+      this.longitude = longitude
+
+      done()
+    })
+})
+```
 
 ### Bugs
 
@@ -222,25 +258,24 @@ We are very happy with the final deliverable which meets the brief. We think it 
 
 ### Blocker: Plants index page
 
-Not so much a blocker but we ran out of time on this one.  There were too many fields in the plant model to fit neatly in the table.  Ejike and Prash who worked on this piece primarily attempted to fix a column in the table so that it could scroll horizontally but the plant name would still be visible.
+Not so much a blocker but we ran out of time on this one.  There were too many fields in the plant model to fit neatly in the table.  Ejike and Prash who worked on this piece primarily attempted to fix a column in the table so that it could scroll horizontally but the plant name would still be visible.  They did not manage to get this working in the time.
 
 After the project, I made a change to build a Show page that could show all the detail of each plant and limited the index page to show the seed/harvest growing calendar.
 
 ## Future Content
 
 Given more time, we would like to include the following capabilities:
-* Make more responsive for use on mobiles
-* Consume a second API to include superhero theme tunes
-* Keep score between games
-* Allow user to select their superhero character for the game
-* Make more of the groups - eg include a separate entry page
-* Combine the different filter methods on the index page so they work together
-* Devise a Superhero name generator.
+* Extend the user model so that users could message other growers
+* Link the plant model to the user model so that users could set themselves up as 'expert' growers at types of Plants
+* As above for the plots model so that plots that are good for growing certain types of plant can be identified.
+* Allow users to create/edit/delete plants.
+* Refactoring - splitting out elements of code into components to shorten pages would be good.
+* Accessibility - users can't comment/rate unless logged in and they can't see the distances - ideally the app would communicate that better and encourage users to register and log in.
 
 ## What we learned
 
-This project was such a great learning experience.  Major learning points:
-* Storing values in state but not setting state too often.
-* Accessing fields within the API using bracket notation so that we can build up variables using string literals.
-* The API included data on Affiliated Groups.  This data needed a lot of attention (eg to remove duplicates).  This was probably our biggest challenge.
-* Bulma is very powerful - you need to engage with the documentation to make the most of it and make it more customizable.
+Major learning points:
+* Creation of code branches using Git and GitHub
+* Merging the code from the four different developers back to a single code base.
+* Good communication essential for handling the above
+* Pair coding to MVP ensured we delivered a whole project - building it this way required careful communication and meant that we got to grips with merging code early.
