@@ -221,6 +221,7 @@ We built the registration and login pages in pairs. <sup>3</sup>
 * Responsive design<sup>3</sup>
 * Automated tests<sup>3</sup>
 * Seeded database with around 16 plots, 10 plants and 5 users<sup>3</sup>
+* Trying to get background images to work for mobile as well as desktop<sup>1</sup>
 
 #### How to lookup lat/long co-ordinates from post code
 In the first draft of our Plot Add new/Edit pages, we had the user enter the latitude and longitude of the plot.  This seemed a cumbersome exercise so Freddie took on the task of implementing a function to convert a post code into lat/long co-ordinates using an API called postcodes.io.  The function was built in the backend in the Plot model for the plot location and in the user model for the user's location.  Below is the function from the Plot model.
@@ -247,7 +248,7 @@ plotSchema.pre('validate', function getGeolocation(done) {
 ### Bugs
 
 * Clicking Delete on the Show page should present the index page but instead presents the Home page
-* The images in mobile view are blurry.
+* The images in mobile view are a little blurry.
 
 
 ## Wins and Blockers
@@ -255,6 +256,9 @@ plotSchema.pre('validate', function getGeolocation(done) {
 ### Win: Final deliverable looks good and works well
 
 We are very happy with the final deliverable which meets the brief. We think it looks great and is packed full of features.  On the final day, we tested all features as a group and fixed all of the bugs we found except the two set out above (about 15 bugs in all).
+
+#### Blocker: Background images on mobile
+Given the subject of our site, we wanted the images to be colourful and vibrant and chose artful pictures of vegetables from the 'Unsplash' site to decorate it.  In desktop, I used the CSS attribute 'background-attachment: fixed;' to ensure the image was always visible even on pages that scrolled eg the Index page.  However, after some research it became clear that this attribute is not supported in mobile browsers (for good reasons.) I therefore, created a media query that attempted to replicate that behaviour on a mobile.  This worked OK on most but not all of the pages (eg on the Plot index page, the carrots in the background image are stretched and blurred).
 
 ### Blocker: Plants index page
 
