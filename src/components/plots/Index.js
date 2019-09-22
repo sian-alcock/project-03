@@ -72,11 +72,13 @@ class PlotsIndex extends React.Component {
       volunteerBoolean: e.target.checked
     }, () => this.combineFiltersAndSort(this.state.allPlots))
   }
+
   handleBioWasteBoolean(e) {
     this.setState({
       bioWasteBoolean: e.target.checked
     }, () => this.combineFiltersAndSort(this.state.allPlots))
   }
+
   handlePlotType(e) {
     console.log(e.target.value)
     this.setState({
@@ -100,16 +102,16 @@ class PlotsIndex extends React.Component {
     let filteredByBioWaste
     let filteredByCostsInvolved
     let filteredByPlotType
-    let filterBySearchText
+    let filteredBySearchText
     let filteredBySlotsAvailable
 
     // Create filter based on Regular expression of the search term
     const re= new RegExp(this.state.searchTerm, 'i')
 
     if(!this.state.searchTerm) {
-      filterBySearchText = this.state.allPlots
+      filteredBySearchText = this.state.allPlots
     } else {
-      filterBySearchText = this.state.allPlots.filter(plot => re.test(plot.name))
+      filteredBySearchText = this.state.allPlots.filter(plot => re.test(plot.name))
     }
 
     if(this.state.plotType === 'All') {
@@ -117,8 +119,6 @@ class PlotsIndex extends React.Component {
     } else {
       filteredByPlotType = this.state.allPlots.filter(plot => plot.plotType === this.state.plotType)
 
-      // console.log(this.state.plotType)
-      // console.log(filteredByPlotType)
     }
 
     if(this.state.costInvolvedBoolean) {
@@ -146,24 +146,15 @@ class PlotsIndex extends React.Component {
 
     if(this.state.bioWasteBoolean) {
       filteredByBioWaste = this.state.allPlots.filter(plot => plot.bioWasteAccepted)
-      // console.log(filteredByBioWaste)
     } else {
       filteredByBioWaste = this.state.allPlots
     }
 
     _.indexOf = _.findIndex
-    filteredPlots = _.intersection(this.state.allPlots, filteredByVolunteer, filteredByBioWaste, filteredByCostsInvolved, filteredByPlotType, filterBySearchText, filteredBySlotsAvailable)
-
-    console.log('volunteer filter', filteredByVolunteer)
-    console.log('biowaste filter', filteredByBioWaste)
-    console.log('cost filter', filteredByCostsInvolved)
+    filteredPlots = _.intersection(this.state.allPlots, filteredByVolunteer, filteredByBioWaste, filteredByCostsInvolved, filteredByPlotType, filteredBySearchText, filteredBySlotsAvailable)
 
     const [field, order] = this.state.sortTerm.split('|')
-
     const sortedPlots = _.orderBy(filteredPlots, [field], [order])
-
-    console.log('sortedPlots', sortedPlots)
-
     return this.setState({ plotsToDisplay: sortedPlots })
 
   }
@@ -196,37 +187,37 @@ class PlotsIndex extends React.Component {
       <section className="section index-background">
         <div className="container">
           <div className="box tableBorder">
-            <h2 className="title is-3 has-white-text">Our Plots</h2>
-            <p>Our community is growing everyday. As the movement builds, more and more people are registering their plots on the site.<br />
-            Use this page to find a plot near you. Or register a plot where people can grow stuff. This will allow people to find your plot and either share your space or help you with your garden!</p>
-          </div>
-        </div>
-        <br />
-        <div className="container">
-          <div className="box tableBorder">
-            <h2 className="title is-3 has-white-text">Find a plot</h2>
-            <div className="field control has-icons-left">
-              <span className="icon is-left">
-                <i className="fas fa-search"></i>
-              </span>
-              <input className="input is-fullwidth" placeholder="search" onKeyUp={this.handleSearchKeyUp} />
+            <h3 className="subtitle is-size-3">Find a plot</h3>
+            <p className="before-control">Use this page to find a plot near you. Or register a plot where people can grow stuff.</p>
 
-            </div>
+            <div className="columns">
+              <div className="column is-half">
+                <div className="field control has-icons-left">
+                  <span className="icon is-left">
+                    <i className="fas fa-search"></i>
+                  </span>
+                  <input className="input is-half" placeholder="search" onKeyUp={this.handleSearchKeyUp} />
+                </div>
+              </div>
 
-            <div className="field">
-              <div className="select is-fullwidth">
-                <select onChange={this.handleSortChange}>
-                  <option value="name|asc">Name A-Z</option>
-                  <option value="name|desc">Name Z-A</option>
-                  <option value="averageRating|asc">Rated Lo-Hi</option>
-                  <option value="averageRating|desc">Rated Hi-Lo</option>
-                  <option value="numOfSlots|asc">Number of slots Lo-Hi</option>
-                  <option value="numOfSlots|desc">Number of slots Hi-Lo</option>
-                  <option value="costPerAnnum|asc">Cost Lo-Hi</option>
-                  <option value="costPerAnnum|desc">Cost Hi-Lo</option>
-                </select>
+              <div className="column is-half">
+                <div className="field">
+                  <div className="select is-fullwidth">
+                    <select onChange={this.handleSortChange}>
+                      <option value="name|asc">Name A-Z</option>
+                      <option value="name|desc">Name Z-A</option>
+                      <option value="averageRating|asc">Rated Lo-Hi</option>
+                      <option value="averageRating|desc">Rated Hi-Lo</option>
+                      <option value="numOfSlots|asc">Number of slots Lo-Hi</option>
+                      <option value="numOfSlots|desc">Number of slots Hi-Lo</option>
+                      <option value="costPerAnnum|asc">Cost Lo-Hi</option>
+                      <option value="costPerAnnum|desc">Cost Hi-Lo</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
+
             <div className="columns">
               <div className="column is-half">
                 <div className="field">
